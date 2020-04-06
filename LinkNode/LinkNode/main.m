@@ -26,8 +26,8 @@ int main(int argc, const char * argv[]) {
         cache[@5] = @"e";
         NSLog(@"%@", @(cache.count));       // 输出 3
         NSLog(@"%@", cache[@2]);            // 输出 "b"
-        cache[@6] = @"f";                   // 设置缓存后，移除了 "d"
-        NSLog(@"%@", cache[@4]);            // 输出 (null)
+        cache[@6] = @"f";                   // 设置缓存后，移除了 "e"
+        NSLog(@"%@", cache[@4]);            // 输出 "d"
     }
     return 0;
 }

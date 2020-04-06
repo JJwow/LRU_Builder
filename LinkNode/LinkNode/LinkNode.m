@@ -13,6 +13,9 @@
 @end
 
 @interface LinkList ()
+{
+    dispatch_semaphore_t semaphore;
+}
 @property (nonatomic, assign) NSInteger length;
 @property (nonatomic, strong) LinkNode *head;
 @property (nonatomic, strong) LinkNode *guard;
@@ -28,12 +31,14 @@
         // TODO:
         _capacity = capacity;
         _dic = [NSMutableDictionary new];
+        semaphore = dispatch_semaphore_create(1);
     }
     return self;
 }
 
 //通过字典的形式获取数据
 -(nullable NSString *)objectForKeyedSubscript:(NSNumber *)key{
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     LinkNode *node = [_dic objectForKey:key];
     if ([_dic objectForKey:key]) {//已经存在
         node = [_dic objectForKey:key];//找到对应的node
@@ -50,11 +55,13 @@
         _guard.childNext = node;//将哨兵节点指向新的节点
         _guard = node;//新节点成为哨兵节点
     }
+    dispatch_semaphore_signal(semaphore);
     return node.data;
 }
 
 //通过字典的形式添加数据
 -(void)setObject:(NSString *)obj forKeyedSubscript:(NSNumber *)key{
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     LinkNode *node;
     if (!_head && _capacity > 0) {//头节点不存在,生成第一个节点
         node = [LinkNode new];
@@ -91,6 +98,7 @@
         _guard = node;//新节点成为哨兵节点
     }
     _dic[key] = node;//将第一个节点放到hash表中
+    dispatch_semaphore_signal(semaphore);
 }
 
 - (NSUInteger)count

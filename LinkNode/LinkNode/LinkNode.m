@@ -16,7 +16,6 @@
 {
     dispatch_semaphore_t semaphore;
 }
-@property (nonatomic, assign) NSInteger length;
 @property (nonatomic, strong) LinkNode *head;
 @property (nonatomic, strong) LinkNode *guard;
 @property (nonatomic, strong) NSMutableDictionary *dic;
